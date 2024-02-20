@@ -4,6 +4,7 @@ import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.behaviour.interfaces.
 import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.services.exceptions.WrongDataException
 import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.services.interfaces.LoginService
 import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.services.interfaces.PasswordHasherService
+import org.example.ru.hse.morozov.dmitriy.ihw2.di.DI
 
 class DefaultLoginService(
     private val userController: UserController,
@@ -17,6 +18,7 @@ class DefaultLoginService(
         if (user.password != hashedPassword) {
             throw WrongDataException("Неверный пароль")
         }
+        DI.currentUserRole = user.role
     }
 
 }

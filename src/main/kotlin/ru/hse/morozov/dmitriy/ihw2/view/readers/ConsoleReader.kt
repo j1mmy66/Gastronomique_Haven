@@ -1,6 +1,8 @@
 package org.example.ru.hse.morozov.dmitriy.ihw2.view.readers
 
-class ConsoleReader : Reader{
+import org.example.ru.hse.morozov.dmitriy.ihw2.view.readers.interfaces.Reader
+
+class ConsoleReader : Reader {
     override fun readInt(): Int {
         var input: Int? = null
         while (input == null) {

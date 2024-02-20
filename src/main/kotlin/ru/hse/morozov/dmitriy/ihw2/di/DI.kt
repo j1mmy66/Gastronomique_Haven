@@ -10,11 +10,14 @@ import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.services.interfaces.L
 import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.services.interfaces.PasswordHasherService
 import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.validators.DefaultRegistrationValidator
 import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.validators.interfaces.RegistrationValidator
+import org.example.ru.hse.morozov.dmitriy.ihw2.models.user.UserRole
 import org.example.ru.hse.morozov.dmitriy.ihw2.view.menu.LoginConsoleMenu
 import org.example.ru.hse.morozov.dmitriy.ihw2.view.readers.ConsoleReader
-import org.example.ru.hse.morozov.dmitriy.ihw2.view.readers.Reader
+import org.example.ru.hse.morozov.dmitriy.ihw2.view.readers.interfaces.Reader
 
 object DI {
+
+    var currentUserRole = UserRole.VISITOR
     val consoleReader: Reader
         get() = ConsoleReader()
 
