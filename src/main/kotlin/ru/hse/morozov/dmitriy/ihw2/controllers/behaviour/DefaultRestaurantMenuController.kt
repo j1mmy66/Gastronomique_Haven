@@ -1,12 +1,11 @@
 package org.example.ru.hse.morozov.dmitriy.ihw2.controllers.behaviour
 
 import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.behaviour.interfaces.RestaurantMenuController
-import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.database.DefaultRestaurantMenuDatabaseController
 import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.database.interfaces.RestaurantMenuDatabaseController
 import org.example.ru.hse.morozov.dmitriy.ihw2.models.dish.Dish
 import org.example.ru.hse.morozov.dmitriy.ihw2.models.menu.RestaurantMenu
 
-class RestaurantDefaultMenuController(private val menuDatabaseController : RestaurantMenuDatabaseController)
+class DefaultRestaurantMenuController(private val menuDatabaseController : RestaurantMenuDatabaseController)
     : RestaurantMenuController{
 
     override fun addDish(dish: Dish) : Boolean {

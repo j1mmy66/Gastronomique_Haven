@@ -1,7 +1,14 @@
 package org.example.ru.hse.morozov.dmitriy.ihw2.view.menu
 
-class AdminConsoleMenu(
+import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.behaviour.interfaces.RestaurantMenuController
+import org.example.ru.hse.morozov.dmitriy.ihw2.models.dish.Dish
+import org.example.ru.hse.morozov.dmitriy.ihw2.view.printers.interfaces.RestaurantMenuPrinter
+import org.example.ru.hse.morozov.dmitriy.ihw2.view.readers.interfaces.Reader
 
+class AdminConsoleMenu(
+    private val restaurantMenuController: RestaurantMenuController,
+    private val restaurantMenuPrinter: RestaurantMenuPrinter,
+    private val consoleReader : Reader
 
 ) : ConsoleMenu("Меню администратора") {
     override val menuItems: List<MenuItem> = listOf(
@@ -17,11 +24,11 @@ class AdminConsoleMenu(
     )
 
     private fun showMenu() {
-        TODO()
+        restaurantMenuPrinter.printMenu(restaurantMenuController.getMenu())
     }
 
     private fun addDish() {
-        TODO()
+
     }
 
     private fun deleteDish() {

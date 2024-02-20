@@ -1,7 +1,14 @@
 package org.example.ru.hse.morozov.dmitriy.ihw2.view.menu
 
-class VisitorConsoleMenu(
+import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.behaviour.interfaces.RestaurantMenuController
+import org.example.ru.hse.morozov.dmitriy.ihw2.view.printers.DefaultRestaurantMenuPrinter
+import org.example.ru.hse.morozov.dmitriy.ihw2.view.printers.interfaces.RestaurantMenuPrinter
+import org.example.ru.hse.morozov.dmitriy.ihw2.view.readers.interfaces.Reader
 
+class VisitorConsoleMenu(
+    private val restaurantMenuController: RestaurantMenuController,
+    private val restaurantMenuPrinter: RestaurantMenuPrinter,
+    private val consoleReader : Reader
 ) : ConsoleMenu("Меню посетителя") {
     override val menuItems: List<MenuItem> = listOf(
         MenuItem("Сделать заказ", ::makeOrder),
@@ -34,7 +41,7 @@ class VisitorConsoleMenu(
     }
 
     private fun showMenu() {
-        TODO()
+        restaurantMenuPrinter.printMenu(restaurantMenuController.getMenu())
     }
 
     private fun addDishToOrder() {
