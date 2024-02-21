@@ -1,6 +1,8 @@
 package org.example.ru.hse.morozov.dmitriy.ihw2.view.menu
 
 import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.behaviour.interfaces.RestaurantMenuController
+import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.behaviour.interfaces.RevenueController
+import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.behaviour.interfaces.ReviewController
 import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.services.interfaces.RegistrationService
 import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.validators.interfaces.DishValidator
 import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.validators.interfaces.RegistrationValidator
@@ -15,6 +17,8 @@ class AdminConsoleMenu(
     private val restaurantMenuPrinter: RestaurantMenuPrinter,
     private val registrationService: RegistrationService,
     private val registrationValidator: RegistrationValidator,
+    private val reviewController: ReviewController,
+    private val revenueController: RevenueController,
     private val enumPrinter: EnumPrinter,
     private val dishValidator: DishValidator,
     private val consoleReader : Reader
@@ -25,7 +29,7 @@ class AdminConsoleMenu(
         MenuItem("Добавить блюдо", ::addDish),
         MenuItem("Удалить блюдо",::deleteDish),
         MenuItem("Показать отзывы", ::showReviews),
-        MenuItem("Добавить количество блюд", ::addDishNumber),
+        MenuItem("Добавить количество блюд", ::addDishAmount),
         MenuItem("Показать выручку", ::showRevenue),
         MenuItem("Показать статистику", ::showStatistics),
         MenuItem("Зарегистрировать нового посетителя", ::registerNewVisitor)
@@ -57,8 +61,12 @@ class AdminConsoleMenu(
             val complexity = consoleReader.readInt()
             dishValidator.validateComplexity(complexity)
 
-            if(restaurantMenuController.addDish(Dish(dishName, DishType.entries[dishType], price, complexity))) {
-                println("Блюдо: ${dishName} успешно добавлено")
+            println("Введите количество")
+            val amount = consoleReader.readInt()
+            dishValidator.validateAmount(amount)
+
+            if(restaurantMenuController.addDish(Dish(dishName, DishType.entries[dishType], price, complexity, amount))) {
+                println("Блюдо: $dishName успешно добавлено")
             }
             else {
                 println("Что-то пошло не так")
@@ -82,15 +90,40 @@ class AdminConsoleMenu(
     }
 
     private fun showReviews() {
-        TODO()
+        handleExceptions {
+            //Тут, конечно, должно быть что-то покрасивей, чем вывод всех отзывов, но я устал(
+            val reviews = reviewController.getAllReviews()
+            println("Отзывы")
+            for (i in reviews) {
+                println(i)
+            }
+        }
     }
 
-    private fun addDishNumber() {
-        TODO()
+    private fun addDishAmount() {
+        handleExceptions {
+            println("Введите название блюда")
+            val dishName = consoleReader.readStr()
+            dishValidator.validateName(dishName)
+
+            println("Введите количество")
+            val amount = consoleReader.readInt()
+            dishValidator.validateAmount(amount)
+
+            if (restaurantMenuController.addDishAmount(dishName, amount)){
+                println("Количество успешно добавлено")
+            }
+            else {
+                println("Что-то пошло не так")
+            }
+        }
     }
 
     private fun showRevenue() {
-        TODO()
+        handleExceptions {
+            println("На данный момент выручка заведения составляет: " +
+                    "${revenueController.getRevenue()}")
+        }
     }
 
     private fun showStatistics() {

@@ -27,4 +27,12 @@ class DefaultDishValidator : DishValidator {
         }
 
     }
+
+    override fun validateAmount(amount: Int) {
+        if (amount < 0 || amount > 100) {
+            throw IllegalArgumentException("Количество должно быть от 0 до 100")
+        }
+    }
+
+
 }

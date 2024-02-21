@@ -8,4 +8,8 @@ interface DishValidator {
     fun validatePrice(price : Int)
 
     fun validateComplexity(complexity : Int)
+
+    fun validateAmount(amount : Int)
+
+
 }

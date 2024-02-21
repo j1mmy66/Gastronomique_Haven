@@ -28,7 +28,9 @@ class DefaultRestaurantMenuDatabaseController : RestaurantMenuDatabaseController
                         "name TEXT NOT NULL ," +
                         "dish_type TEXT NOT NULL," +
                         "price INTEGER NOT NULL ," +
-                        "complexity INTEGER NOT NULL)"
+                        "complexity INTEGER NOT NULL," +
+                        "amount INTEGER NOT NULL," +
+                        "count_ordered INTEGER NOT NULL )"
             )
         }
         catch (e : FileNotFoundException) {
@@ -43,8 +45,9 @@ class DefaultRestaurantMenuDatabaseController : RestaurantMenuDatabaseController
         try{
             val statement: Statement = connection.createStatement()
             statement.executeUpdate(
-                "INSERT INTO menu (name, dish_type, price, complexity) VALUES (" +
-                "'${dish.name}', '${dish.category}', '${dish.price}', '${dish.complexity}')"
+                "INSERT INTO menu (name, dish_type, price, complexity, amount) VALUES (" +
+                "'${dish.name}', '${dish.category}', '${dish.price}'," +
+                        " '${dish.complexity}', '${dish.amount}', '${dish.countOrdered}')"
             )
             return true
         }
@@ -72,8 +75,10 @@ class DefaultRestaurantMenuDatabaseController : RestaurantMenuDatabaseController
             val dishType = DishType.valueOf(resultSet.getString("dish_type"))
             val price = resultSet.getInt("price")
             val complexity = resultSet.getInt("complexity")
+            val amount = resultSet.getInt("amount")
+            val countOrdered = resultSet.getInt("count_ordered")
 
-            val dish = Dish(name, dishType, price, complexity)
+            val dish = Dish(name, dishType, price, complexity, amount, countOrdered)
             if (menu.containsKey(dishType)) {
                 menu[dishType]!!.add(dish)
             } else {
@@ -93,6 +98,17 @@ class DefaultRestaurantMenuDatabaseController : RestaurantMenuDatabaseController
         }
         catch (e : SQLException) {
             return RestaurantMenu(mutableMapOf())
+        }
+    }
+
+    override fun addDishAmount(dishName: String, amount : Int): Boolean {
+        try{
+            val statement: Statement = connection.createStatement()
+            statement.executeUpdate("UPDATE menu SET amount = amount + $amount WHERE name = $dishName")
+            return true
+        }
+        catch (e : SQLException) {
+            return false
         }
     }
 

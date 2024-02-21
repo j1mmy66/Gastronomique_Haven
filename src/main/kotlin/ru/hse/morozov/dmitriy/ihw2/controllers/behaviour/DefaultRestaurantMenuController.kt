@@ -20,4 +20,9 @@ class DefaultRestaurantMenuController(private val menuDatabaseController : Resta
         return menuDatabaseController.getMenu()
     }
 
+    override fun addDishAmount(dishName: String, amount: Int): Boolean {
+        return menuDatabaseController.addDishAmount(dishName, amount)
+    }
+
+
 }

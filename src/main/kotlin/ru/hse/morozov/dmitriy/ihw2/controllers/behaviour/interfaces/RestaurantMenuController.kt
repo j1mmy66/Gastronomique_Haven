@@ -9,4 +9,6 @@ interface RestaurantMenuController {
     fun deleteDishByName(dishName : String) : Boolean
 
     fun getMenu() : RestaurantMenu
+
+    fun addDishAmount(dishName: String, amount : Int) : Boolean
 }

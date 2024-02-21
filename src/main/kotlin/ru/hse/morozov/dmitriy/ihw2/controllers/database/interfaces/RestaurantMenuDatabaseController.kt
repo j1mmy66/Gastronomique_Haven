@@ -10,5 +10,7 @@ interface RestaurantMenuDatabaseController {
 
     fun getMenu() : RestaurantMenu
 
+    fun addDishAmount(dishName: String, amount : Int) : Boolean
+
     fun closeConnection() : Boolean
 }
