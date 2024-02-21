@@ -45,6 +45,9 @@ class LoginConsoleMenu(
             } catch (e: WrongDataException) {
                 println(e.message)
             }
+            catch (e : Exception) {
+                println(e.message)
+            }
         }
     }
 }

@@ -16,7 +16,7 @@ class DefaultReviewDatabaseController : ReviewDatabaseController{
     init {
         try{
             Class.forName("org.sqlite.JDBC")
-            connection = DriverManager.getConnection("jdbc:sqlite:users.db")
+            connection = DriverManager.getConnection("jdbc:sqlite:reviews.db")
 
             val statement: Statement = connection.createStatement()
             statement.executeUpdate(

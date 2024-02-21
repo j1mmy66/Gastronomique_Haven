@@ -33,7 +33,9 @@ class AdminConsoleMenu(
     )
 
     private fun showMenu() {
-        restaurantMenuPrinter.printMenu(restaurantMenuController.getMenu())
+        handleExceptions {
+            restaurantMenuPrinter.printMenu(restaurantMenuController.getMenu())
+        }
     }
 
     private fun addDish() {
@@ -129,6 +131,9 @@ class AdminConsoleMenu(
                 println(e.message)
             } catch (e: NumberFormatException) {
                 println("Некорректное значение для чисел")
+            }
+            catch (e : Exception) {
+                println(e.message)
             }
         }
     }

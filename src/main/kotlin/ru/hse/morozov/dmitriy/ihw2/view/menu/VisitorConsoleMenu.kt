@@ -43,32 +43,53 @@ class VisitorConsoleMenu(
     }
 
     private fun leaveReview() {
-        println("Введите название блюда:")
-        val dishName = consoleReader.readStr()
-        reviewValidator.validateDishName(dishName)
+        handleExceptions {
+            println("Введите название блюда:")
+            val dishName = consoleReader.readStr()
+            reviewValidator.validateDishName(dishName)
 
-        println("Введите оценку от 0 до 5")
-        val rating = consoleReader.readInt()
-        reviewValidator.validateRating(rating)
+            println("Введите оценку от 0 до 5")
+            val rating = consoleReader.readInt()
+            reviewValidator.validateRating(rating)
 
-        println("Введите отзыв")
-        val content = consoleReader.readStr()
-        reviewValidator.validateContent(content)
+            println("Введите отзыв")
+            val content = consoleReader.readStr()
+            reviewValidator.validateContent(content)
 
-        if(reviewController.addReview(Review(rating, dishName, content))) {
-            println("Отзыв успешно добавлен")
-        }
-        else {
-            println("Что-то пошло не так")
+            if (reviewController.addReview(Review(rating, dishName, content))) {
+                println("Отзыв успешно добавлен")
+            } else {
+                println("Что-то пошло не так")
+            }
         }
     }
 
     private fun showMenu() {
-        restaurantMenuPrinter.printMenu(restaurantMenuController.getMenu())
+        handleExceptions {
+            restaurantMenuPrinter.printMenu(restaurantMenuController.getMenu())
+        }
     }
 
     private fun addDishToOrder() {
         TODO()
+    }
+
+    private fun handleExceptions(block: () -> Unit) {
+        while (true) {
+            try {
+                block()
+                break
+            } catch (e: IllegalArgumentException) {
+                println(e.message)
+            } catch (e: NoSuchElementException) {
+                println(e.message)
+            } catch (e: NumberFormatException) {
+                println("Некорректное значение для чисел")
+            }
+            catch (e : Exception) {
+                println(e.message)
+            }
+        }
     }
 
 }
