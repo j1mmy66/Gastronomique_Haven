@@ -6,5 +6,4 @@ data class Dish(val name: String,
                 val complexity: Int,
                 val amount : Int,
                 val countOrdered : Int = 0
-    ){
-}
+    )

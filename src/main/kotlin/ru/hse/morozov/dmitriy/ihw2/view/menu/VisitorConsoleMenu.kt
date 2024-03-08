@@ -1,11 +1,13 @@
 package org.example.ru.hse.morozov.dmitriy.ihw2.view.menu
 
+import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.behaviour.interfaces.OrderController
 import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.behaviour.interfaces.RestaurantMenuController
 import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.behaviour.interfaces.ReviewController
-import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.validators.interfaces.DishValidator
+
 import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.validators.interfaces.ReviewValidator
+import org.example.ru.hse.morozov.dmitriy.ihw2.di.DI
 import org.example.ru.hse.morozov.dmitriy.ihw2.models.review.Review
-import org.example.ru.hse.morozov.dmitriy.ihw2.view.printers.DefaultRestaurantMenuPrinter
+
 import org.example.ru.hse.morozov.dmitriy.ihw2.view.printers.interfaces.RestaurantMenuPrinter
 import org.example.ru.hse.morozov.dmitriy.ihw2.view.readers.interfaces.Reader
 
@@ -14,7 +16,8 @@ class VisitorConsoleMenu(
     private val restaurantMenuPrinter: RestaurantMenuPrinter,
     private val reviewController: ReviewController,
     private val reviewValidator: ReviewValidator,
-    private val consoleReader : Reader
+    private val consoleReader : Reader,
+    private val orderController: OrderController
 ) : ConsoleMenu("Меню посетителя") {
     override val menuItems: List<MenuItem> = listOf(
         MenuItem("Сделать заказ", ::makeOrder),
@@ -27,19 +30,67 @@ class VisitorConsoleMenu(
     )
 
     private fun makeOrder() {
-        TODO()
+        handleExceptions {
+            orderController.createOrder(DI.currentUserLogin)
+            showMenu()
+            while (true) {
+                println("Введите название блюда")
+                val dishName = consoleReader.readStr()
+                println("Введите количество порций")
+                val amount = consoleReader.readInt()
+                if (orderController.addDishToOrder(dishName, amount)) {
+                    println("Блюдо добавлено в заказ")
+                } else {
+                    println("Что-то пошло не так")
+                }
+                println("Хотите добавить еще блюдо? (да/нет)")
+                if (consoleReader.readStr() != "да") {
+                    break
+                }
+            }
+            println(orderController.addOrder(DI.currentOrder!!))
+        }
+
+
     }
 
     private fun checkOrderStatus() {
-        TODO()
+        handleExceptions {
+            for (i in DI.preparedOrders) {
+                if (i.userName == DI.currentUserLogin) {
+                    println("Заказ ${i.orderID} ${i.status}")
+                }
+
+            }
+            for (i in DI.orders) {
+                if (i.userName == DI.currentUserLogin) {
+                    println("Заказ ${i.orderID} ${i.status}")
+                }
+            }
+        }
     }
 
     private fun payBill() {
-        TODO()
+        handleExceptions {
+            println("Заказ на сумму ${orderController.payBill()} оплачен")
+        }
     }
 
     private fun cancelOrder() {
-        TODO()
+        handleExceptions {
+            println("Введите номер заказа")
+            val id = consoleReader.readInt()
+            val order = orderController.findOrderById(id)
+            if (order != null) {
+                if (orderController.cancelOrder(order)) {
+                    println("Заказ отменен")
+                } else {
+                    println("Что-то пошло не так")
+                }
+            } else {
+                println("Заказ не найден")
+            }
+        }
     }
 
     private fun leaveReview() {
@@ -64,6 +115,8 @@ class VisitorConsoleMenu(
         }
     }
 
+
+
     private fun showMenu() {
         handleExceptions {
             restaurantMenuPrinter.printMenu(restaurantMenuController.getMenu())
@@ -71,7 +124,19 @@ class VisitorConsoleMenu(
     }
 
     private fun addDishToOrder() {
-        TODO()
+        handleExceptions {
+            println("Введите номер заказа")
+            val id = consoleReader.readInt()
+            println("Введите название блюда")
+            val dishName = consoleReader.readStr()
+            println("Введите количество порций")
+            val amount = consoleReader.readInt()
+            if (orderController.addDishToAcceptedOrder(id, dishName, amount)) {
+                println("Блюдо добавлено в заказ")
+            } else {
+                println("Что-то пошло не так")
+            }
+        }
     }
 
     private fun handleExceptions(block: () -> Unit) {

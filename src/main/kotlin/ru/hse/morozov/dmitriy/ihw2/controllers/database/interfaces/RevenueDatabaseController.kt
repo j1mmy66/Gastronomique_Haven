@@ -4,4 +4,6 @@ interface RevenueDatabaseController {
     fun addToRevenue(amount: Int) : Boolean
 
     fun getRevenue(): Int
+
+    fun closeConnection() : Boolean
 }

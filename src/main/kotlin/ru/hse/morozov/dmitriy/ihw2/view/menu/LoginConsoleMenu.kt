@@ -24,17 +24,18 @@ class LoginConsoleMenu(
     private fun doOperationWithLoginAndPassword(
         operation: (String, String) -> Unit
     ) {
-        handleExceptions {
-            println("Введите логин:")
-            val login = consoleReader.readStr()
-            registrationValidator.validateLogin(login)
+            handleExceptions {
+                println("Введите логин:")
+                val login = consoleReader.readStr()
+                registrationValidator.validateLogin(login)
 
-            println("Введите пароль:")
-            val password = consoleReader.readStr()
-            registrationValidator.validatePassword(password)
+                println("Введите пароль:")
+                val password = consoleReader.readStr()
+                registrationValidator.validatePassword(password)
 
-            operation(login, password)
-        }
+                operation(login, password)
+            }
+
     }
 
     private fun handleExceptions(block: () -> Unit) {

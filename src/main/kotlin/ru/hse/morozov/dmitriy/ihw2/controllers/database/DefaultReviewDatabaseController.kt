@@ -4,14 +4,10 @@ import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.database.exceptions.D
 import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.database.interfaces.ReviewDatabaseController
 import org.example.ru.hse.morozov.dmitriy.ihw2.models.review.Review
 import java.io.FileNotFoundException
-import java.sql.Connection
-import java.sql.DriverManager
-import java.sql.ResultSet
-import java.sql.SQLException
-import java.sql.Statement
+import java.sql.*
 
 class DefaultReviewDatabaseController : ReviewDatabaseController{
-    private lateinit var connection: Connection
+    private var connection: Connection
 
     init {
         try{
@@ -26,36 +22,48 @@ class DefaultReviewDatabaseController : ReviewDatabaseController{
                         "dish_name TEXT NOT NULL," +
                         "content TEXT NOT NULL)"
             )
+            closeConnection()
         }
         catch (e : FileNotFoundException) {
-            throw DatabaseInitException("UserDatabasecontroller : Error with JRPC")
+            closeConnection()
+            throw DatabaseInitException("UserDatabaseController : Error with JRPC")
         }
         catch (e : SQLException) {
-            throw DatabaseInitException("UserDatabasecontroller : SQLException")
+            closeConnection()
+            throw DatabaseInitException("UserDatabaseController : SQLException")
         }
     }
 
     override fun addReview(review: Review) : Boolean {
         try {
+            Class.forName("org.sqlite.JDBC")
+            connection = DriverManager.getConnection("jdbc:sqlite:reviews.db")
             val statement: Statement = connection.createStatement()
             statement.executeUpdate(
-                "INSERT INTO reviews (rating, dish_name, context) VALUES (" +
+                "INSERT INTO reviews (rating, dish_name, content) VALUES (" +
                 "'${review.rating}', '${review.dishName}', '${review.content}')"
             )
+            closeConnection()
             return true
         }
         catch(e : SQLException) {
+            closeConnection()
             return false
         }
     }
 
     override fun getAllReviews() : MutableList<Review> {
         try {
+            Class.forName("org.sqlite.JDBC")
+            connection = DriverManager.getConnection("jdbc:sqlite:reviews.db")
             val statement: Statement = connection.createStatement()
             val resultSet = statement.executeQuery("SELECT * FROM reviews")
-            return genReviewList(resultSet)
+            val reviews = genReviewList(resultSet)
+            closeConnection()
+            return reviews
         }
         catch (e : SQLException) {
+            closeConnection()
             return mutableListOf()
         }
     }

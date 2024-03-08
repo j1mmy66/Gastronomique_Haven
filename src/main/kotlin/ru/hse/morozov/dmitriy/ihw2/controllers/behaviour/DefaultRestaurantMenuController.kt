@@ -5,7 +5,9 @@ import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.database.interfaces.R
 import org.example.ru.hse.morozov.dmitriy.ihw2.models.dish.Dish
 import org.example.ru.hse.morozov.dmitriy.ihw2.models.menu.RestaurantMenu
 
-class DefaultRestaurantMenuController(private val menuDatabaseController : RestaurantMenuDatabaseController)
+class DefaultRestaurantMenuController(
+    private val menuDatabaseController: RestaurantMenuDatabaseController
+)
     : RestaurantMenuController{
 
     override fun addDish(dish: Dish) : Boolean {
@@ -16,6 +18,8 @@ class DefaultRestaurantMenuController(private val menuDatabaseController : Resta
         return menuDatabaseController.deleteDishByName(dishName)
     }
 
+
+
     override fun getMenu() : RestaurantMenu {
         return menuDatabaseController.getMenu()
     }
@@ -23,6 +27,23 @@ class DefaultRestaurantMenuController(private val menuDatabaseController : Resta
     override fun addDishAmount(dishName: String, amount: Int): Boolean {
         return menuDatabaseController.addDishAmount(dishName, amount)
     }
+
+    override fun findDishWithMaxAmount(): String? {
+        return menuDatabaseController.findDishWithMaxAmount()
+    }
+
+    override fun getDishByName(dishName: String): Dish? {
+        return menuDatabaseController.getDishByName(dishName)
+    }
+
+    override fun addOrderedAmount(dishName: String, amount: Int): Boolean {
+        return menuDatabaseController.addOrderedAmount(dishName, amount)
+    }
+
+
+
+
+
 
 
 }

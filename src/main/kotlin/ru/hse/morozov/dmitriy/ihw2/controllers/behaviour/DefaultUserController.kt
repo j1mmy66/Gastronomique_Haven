@@ -1,7 +1,6 @@
 package org.example.ru.hse.morozov.dmitriy.ihw2.controllers.behaviour
 
 import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.behaviour.interfaces.UserController
-import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.database.DefaultUserDatabaseController
 import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.database.interfaces.UserDatabaseController
 import org.example.ru.hse.morozov.dmitriy.ihw2.models.user.User
 

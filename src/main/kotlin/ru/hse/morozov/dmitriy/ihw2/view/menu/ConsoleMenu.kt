@@ -1,5 +1,7 @@
 package org.example.ru.hse.morozov.dmitriy.ihw2.view.menu
 
+import org.example.ru.hse.morozov.dmitriy.ihw2.di.DI
+
 sealed class ConsoleMenu(
     private val name: String,
 ) : Menu {
@@ -19,9 +21,11 @@ sealed class ConsoleMenu(
     }
 
     override fun processInputIfNotExit(): Boolean {
+        DI.crutch = 0
         val input = readlnOrNull()?.toIntOrNull()
         if (input == null || (input - 1 !in menuItems.indices && input != 0)) {
             println("Неверный ввод")
+            DI.crutch = 1
             return true
         }
         if (input == 0)

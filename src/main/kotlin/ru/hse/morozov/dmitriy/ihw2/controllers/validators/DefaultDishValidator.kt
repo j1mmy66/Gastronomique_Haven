@@ -22,7 +22,7 @@ class DefaultDishValidator : DishValidator {
     }
 
     override fun validateComplexity(complexity: Int) {
-        if (complexity < 0 || complexity > 100) {
+        if (complexity < 0 || complexity > 10) {
             throw IllegalArgumentException("Сложность должна принадлежать диапозону от0 до 100")
         }
 

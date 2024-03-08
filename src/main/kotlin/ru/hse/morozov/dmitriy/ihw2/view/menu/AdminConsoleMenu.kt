@@ -10,6 +10,7 @@ import org.example.ru.hse.morozov.dmitriy.ihw2.models.dish.Dish
 import org.example.ru.hse.morozov.dmitriy.ihw2.models.dish.DishType
 import org.example.ru.hse.morozov.dmitriy.ihw2.view.printers.interfaces.EnumPrinter
 import org.example.ru.hse.morozov.dmitriy.ihw2.view.printers.interfaces.RestaurantMenuPrinter
+import org.example.ru.hse.morozov.dmitriy.ihw2.view.printers.interfaces.ReviewPrinter
 import org.example.ru.hse.morozov.dmitriy.ihw2.view.readers.interfaces.Reader
 
 class AdminConsoleMenu(
@@ -21,7 +22,8 @@ class AdminConsoleMenu(
     private val revenueController: RevenueController,
     private val enumPrinter: EnumPrinter,
     private val dishValidator: DishValidator,
-    private val consoleReader : Reader
+    private val consoleReader : Reader,
+    private val reviewPrinter: ReviewPrinter
 
 ) : ConsoleMenu("Меню администратора") {
     override val menuItems: List<MenuItem> = listOf(
@@ -95,7 +97,7 @@ class AdminConsoleMenu(
             val reviews = reviewController.getAllReviews()
             println("Отзывы")
             for (i in reviews) {
-                println(i)
+                reviewPrinter.printReview(i)
             }
         }
     }
@@ -127,13 +129,19 @@ class AdminConsoleMenu(
     }
 
     private fun showStatistics() {
-        TODO()
+        handleExceptions {
+            println("Самое популярное блюдо: ${restaurantMenuController.findDishWithMaxAmount()}")
+        }
     }
 
     private fun registerNewVisitor() {
         processOperationWithLoginAndPassword { login, password ->
-            registrationService.registerUser(login, password)
-            println("Вы успешно зарегистрировались")
+            if (registrationService.registerUser(login, password)) {
+                println("Вы успешно зарегистрировались")
+            }
+            else {
+                println("Что-то пошло не так")
+            }
         }
     }
 

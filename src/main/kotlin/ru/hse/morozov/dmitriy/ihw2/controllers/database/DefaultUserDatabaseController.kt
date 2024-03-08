@@ -5,14 +5,10 @@ import org.example.ru.hse.morozov.dmitriy.ihw2.controllers.database.interfaces.U
 import org.example.ru.hse.morozov.dmitriy.ihw2.models.user.User
 import org.example.ru.hse.morozov.dmitriy.ihw2.models.user.UserRole
 import java.io.FileNotFoundException
-import java.sql.Connection
-import java.sql.DriverManager
-import java.sql.ResultSet
-import java.sql.SQLException
-import java.sql.Statement
+import java.sql.*
 
 class DefaultUserDatabaseController : UserDatabaseController{
-    private lateinit var connection: Connection
+    private var connection: Connection
 
     init {
         try {
@@ -27,36 +23,55 @@ class DefaultUserDatabaseController : UserDatabaseController{
                         "password TEXT NOT NULL," +
                         "role TEXT NOT NULL)"
             )
+            closeConnection()
         }
         catch (e : FileNotFoundException) {
+            closeConnection()
             throw DatabaseInitException("UserDatabasecontroller : Error with JRPC")
         }
         catch (e : SQLException) {
+
+            closeConnection()
             throw DatabaseInitException("UserDatabasecontroller : SQLException")
         }
     }
 
     override fun addUser(user: User) : Boolean {
         try {
+            Class.forName("org.sqlite.JDBC")
+            connection = DriverManager.getConnection("jdbc:sqlite:users.db")
             val statement: Statement = connection.createStatement()
+
+
+
             statement.executeUpdate(
                 "INSERT INTO users (username, password, role) VALUES (" +
                         "'${user.username}', '${user.password}', '${user.role.name}')"
             )
+            closeConnection()
             return true
         }
         catch (e : SQLException) {
+            closeConnection()
             return false
         }
     }
 
     override fun getUserByUsername(username: String): User? {
         try {
+            Class.forName("org.sqlite.JDBC")
+            connection = DriverManager.getConnection("jdbc:sqlite:users.db")
+
             val statement: Statement = connection.createStatement()
             val resultSet = statement.executeQuery("SELECT * FROM users WHERE username = '$username'")
-            return genUser(resultSet)
+
+
+            val a = genUser(resultSet)
+            closeConnection()
+            return a
         }
         catch (e : SQLException) {
+            closeConnection()
             return null
         }
 

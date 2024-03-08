@@ -14,6 +14,7 @@ dependencies {
     implementation("org.xerial:sqlite-jdbc:3.44.1.0")
     implementation("org.slf4j:slf4j-api:1.7.32")
     implementation("ch.qos.logback:logback-classic:1.2.6")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
 
 }
 

@@ -11,4 +11,12 @@ interface RestaurantMenuController {
     fun getMenu() : RestaurantMenu
 
     fun addDishAmount(dishName: String, amount : Int) : Boolean
+
+    fun findDishWithMaxAmount(): String?
+
+    fun getDishByName(dishName: String): Dish?
+
+    fun addOrderedAmount(dishName: String, amount: Int) : Boolean
+
+
 }

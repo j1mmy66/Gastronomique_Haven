@@ -19,6 +19,7 @@ class DefaultLoginService(
             throw WrongDataException("Неверный пароль")
         }
         DI.currentUserRole = user.role
+        DI.currentUserLogin = user.username
     }
 
 }

@@ -12,5 +12,11 @@ interface RestaurantMenuDatabaseController {
 
     fun addDishAmount(dishName: String, amount : Int) : Boolean
 
+    fun findDishWithMaxAmount(): String?
+
+    fun addOrderedAmount(dishName: String, amount: Int) : Boolean
+
+    fun getDishByName(dishName: String): Dish?
+
     fun closeConnection() : Boolean
 }
